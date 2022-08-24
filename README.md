@@ -27,9 +27,9 @@ const cleaner = await Cleaner({
 const cleanFile = (file: File) => {
   const buffData = await file.arrayBuffer();
   // create folder where to put file
-  wasm.FS.mkdir("files");
+  cleaner.FS.mkdir("files");
   // create file
-  wasm.FS.createDataFile(
+  cleaner.FS.createDataFile(
     "/files",
     file.name,
     new Uint8Array(buffData),
@@ -37,14 +37,14 @@ const cleanFile = (file: File) => {
     true
   );
   // call the cleaner main function with filename
-  const ok = await wasm.callMain([`/files/${file.name}`]);
+  const ok = await cleaner.callMain([`/files/${file.name}`]);
   // cleaner overwrites the cleaned file, let's read it
-  const newFileUArr = wasm.FS.readFile(`/files/${file.name}`);
+  const newFileUArr = cleaner.FS.readFile(`/files/${file.name}`);
 
   // lets remove the file from the file system
-  wasm.FS.unlink(`/files/${file.name}`);
+  clener.FS.unlink(`/files/${file.name}`);
   // lets remove the directory
-  wasm.FS.rmdir("files");
+  cleaner.FS.rmdir("files");
 
   // Return file content (UInt8Array)
   return newFileUArr
